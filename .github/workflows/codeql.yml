@@ -33,7 +33,7 @@ jobs:
       - name: Export monorepo project list
         id: export-monorepo-project-list
         run: |
-          projects=$(find . -maxdepth 2 -name 'pom.xml' | xargs -n 1 dirname | jq -Rsnc '{"language":"java","projects":[inputs | . / "\n" | .[] | select(length > 0)]}')
+          projects=$(find . -maxdepth 2 -name 'pom.xml' | xargs -n 1 dirname | jq -Rsnc '{"language":["java"],"projects":[inputs | . / "\n" | .[] | select(length > 0)]}')
           echo "::set-output name=matrix::$projects"
 
   analyze:
