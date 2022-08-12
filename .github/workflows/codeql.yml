@@ -69,10 +69,11 @@ jobs:
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
-      working-directory: ${{ matrix.project }}
       uses: github/codeql-action/autobuild@v2
+      with:
+        working-directory: ${{ matrix.project }}
 
     - name: Perform CodeQL Analysis
-      working-directory: ${{ matrix.project }}
       uses: github/codeql-action/analyze@v2
-      category: "${{ matrix.project }}-${{ matrix.language }}"
+      with:
+        category: "${{ matrix.project }}-${{ matrix.language }}"
