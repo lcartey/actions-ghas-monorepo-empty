@@ -37,6 +37,7 @@ jobs:
           echo "::set-output name=matrix::$projects"
 
   analyze:
+    needs: prepare-monorepo-project-list
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
