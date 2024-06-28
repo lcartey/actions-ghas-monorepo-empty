@@ -88,3 +88,15 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "${{ matrix.project }}-${{ matrix.language }}"
+
+    - name: Identify previous results
+      if: (github.event_name == 'pull_request' && steps.changes.outputs.src == 'false')
+      run: |
+        export LAST_ANALYSIS=$(gh api /repos/:owner/:repo/code-scanning/analyses --method GET -f ref=refs/heads/main -f tool_name="CodeQL" --jq "[.[] | select(.category==\"./${{ matrix.project }}-${{ matrix.language }}\")][0].id")
+        gh api /repos/:owner/:repo/code-scanning/analyses/$LAST_ANALYSIS -H "Accept: application/sarif+json" > ${{ matrix.project }}-${{ matrix.language }}.sarif
+
+    - name: Upload SARIF
+      if: (github.event_name == 'pull_request' && steps.changes.outputs.src == 'false')
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{ matrix.project }}-${{ matrix.language }}.sarif
