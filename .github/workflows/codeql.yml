@@ -91,6 +91,8 @@ jobs:
 
     - name: Identify previous results
       if: (github.event_name == 'pull_request' && steps.changes.outputs.src == 'false')
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         export LAST_ANALYSIS=$(gh api /repos/:owner/:repo/code-scanning/analyses --method GET -f ref=refs/heads/main -f tool_name="CodeQL" --jq "[.[] | select(.category==\"./${{ matrix.project }}-${{ matrix.language }}\")][0].id")
         gh api /repos/:owner/:repo/code-scanning/analyses/$LAST_ANALYSIS -H "Accept: application/sarif+json" > ${{ matrix.project }}-${{ matrix.language }}.sarif
