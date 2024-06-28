@@ -50,6 +50,8 @@ jobs:
       matrix: ${{fromJSON(needs.prepare-monorepo-project-list.outputs.matrix)}}
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Filter for PRs
       id: changes
@@ -57,11 +59,7 @@ jobs:
       with:
         filters: |
           src:
-            - '${{ matrix.project }}/**'      
-
-    - name: Checkout repository
-      if: (github.event_name != 'pull_request' || steps.changes.outputs.src == 'true')
-      uses: actions/checkout@v3
+            - '${{ matrix.project }}/**'
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
