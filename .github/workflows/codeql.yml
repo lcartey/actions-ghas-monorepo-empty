@@ -101,4 +101,5 @@ jobs:
       if: (github.event_name == 'pull_request' && steps.changes.outputs.src == 'false')
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: ${{ matrix.project }}-${{ matrix.language }}.sarif
+        category: "${{ matrix.project }}-${{ matrix.language }}"
+        sarif_file: empty.sarif
